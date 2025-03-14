@@ -1,7 +1,13 @@
 {
-    "dependencies": ["./graph"],
-    "graphs": {
-      "agent": "./graph/workflow.py:graph"
-    },
-    "env": ".env"
+  "dependencies": ["."],
+  "graphs": {
+    "agent": "./src/react_agent/graph/workflow.py:graph"
+  },
+  "env": ".env",
+  "auth": {
+    "path": "./src/react_agent/auth.py:auth"
+  },
+  "http": {
+    "app": "./src/react_agent/app.py:app"
   }
+}
