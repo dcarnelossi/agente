@@ -1,6 +1,6 @@
 from langgraph.graph import END, START, StateGraph
 from state import InputState, OutputState
-
+from typing import Literal
 from agent import EcommerceAgent
 
 
@@ -22,7 +22,7 @@ class WorkflowManager:
         workflow.add_node("generate_answer", self.agent.generate_answer)
         workflow.add_node("choose_visualization", self.agent.choose_visualization)
 
-        def route_after_interaction(state: dict) -> str:
+        def route_after_interaction(state: dict) -> Literal["analyze_tables","collect_user_interaction"]:
             """
             Se a pergunta for válida (`is_relevant=True`), segue para `analyze_tables`.
             Caso contrário, interrompe a execução e aguarda nova interação do usuário.
@@ -32,11 +32,11 @@ class WorkflowManager:
 
             return "collect_user_interaction"
 
-        def route_after_validation(state: dict) -> str:
+        def route_after_validation(state: dict) -> Literal["generate_sql","execute_sql"]:
             """Se a query falhar na validação, volta para a geração."""
             return "generate_sql" if state.get("retry_generate_sql") else "execute_sql"
 
-        def route_after_execution(state: dict) -> str:
+        def route_after_execution(state: dict) -> Literal["generate_sql","generate_answer"]:
             """Se a execução falhar, volta para gerar a query."""
             return "generate_sql" if state.get("query_error") else "generate_answer"
 
